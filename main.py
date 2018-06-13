@@ -7,6 +7,7 @@ from gensim.models.doc2vec import TaggedDocument
 from sklearn.linear_model import LogisticRegression
 import nltk
 import random
+from nltk.classify.scikitlearn import SklearnClassifier
 # numpy
 import numpy as np
 
@@ -73,6 +74,9 @@ for i in range(7500, 8000):
             y_test[i - 7500] = int(n)
             break
 
-classifier = LogisticRegression()
-classifier.fit(X_train, y_train)
-print ('Accuracy', classifier.score(X_test, y_test))
+classifier = SklearnClassifier(LogisticRegression())
+classifier.train(X_train, y_train)
+print ('Accuracy', nltk.classify.accuracy(classifier, X_test, y_test))
+
+
+
