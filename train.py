@@ -48,5 +48,5 @@ for i in range(7500, 8000):
             y_test[i - 7500] = int(n)
             break
 classifier = LogisticRegression()
-classifier.train(X_train, y_train)
+classifier.fit(X_train, y_train)
 print ('Accuracy', classifier.score(X_test, y_test))
