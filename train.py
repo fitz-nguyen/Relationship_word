@@ -1,3 +1,26 @@
+from gensim.models import Doc2Vec
+from sklearn.linear_model import LogisticRegression
+import nltk
+from nltk.classify.scikitlearn import SklearnClassifier
+# numpy
+import numpy as np
+file = open("TRAIN_FILE.TXT", "r")
+labels = []
+while(1):
+    data = file.readline()
+    label = file.readline().replace("(e2,e1)", "") \
+    .replace("(e1,e2)", "") \
+    .replace("\n", "")
+    labels.append(label)
+
+file.close()
+
+filtered_sentence = nltk.FreqDist(labels)
+label_list = list(filtered_sentence.keys())
+
+model = Doc2Vec.load('./train.d2v')
+
+
 X_train = np.zeros((7500, 400))
 y_train = np.zeros(7500)
 
