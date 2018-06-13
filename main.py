@@ -40,36 +40,37 @@ for i in range(8000):
 
 # print(sentences[0])
 
-model = Doc2Vec(min_count=1, window=10, vector_size=300, sample=1e-4, negative=5, workers=4)
+model = Doc2Vec(min_count=1, window=10, vector_size=400, sample=1e-4, negative=5, workers=8)
 
 model.build_vocab(sentences)
-model.train(sentences_perm(sentences), total_examples=model.corpus_count, epochs=500)
+model.train(sentences_perm(sentences), total_examples=model.corpus_count, epochs=1000)
 
 
 filtered_sentence = nltk.FreqDist(labels)
 label_list = list(filtered_sentence.keys())
 # model.save('./train.d2v')
 
-X_train = np.zeros((7000, 300))
-y_train = np.zeros(7000)
+X_train = np.zeros((7500, 400))
+y_train = np.zeros(7500)
 
-print(y_train)
-for i in range(7000):
+
+for i in range(7500):
     X_train[i] = model.docvecs['%s' % i]
     for n, key in enumerate(label_list):
         if labels[i] == key:
             y_train[i] = int(n)
             break
-print(y_train)
-X_test = np.zeros((1000, 300))
-y_test = np.zeros(1000)
+    print("train %i" % i)
+
+X_test = np.zeros((500, 400))
+y_test = np.zeros(500)
 
 
-for i in range(7000, 8000):
-    X_test[i - 7000] = model.docvecs['%s' % i]
+for i in range(7500, 8000):
+    X_test[i - 7500] = model.docvecs['%s' % i]
     for n, key in enumerate(label_list):
         if labels[i] == key:
-            y_test[i - 7000] = int(n)
+            y_test[i - 7500] = int(n)
             break
 
 classifier = LogisticRegression()
