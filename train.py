@@ -43,7 +43,6 @@ for i in range(7500, 8000):
         if labels[i] == key:
             y_test[i - 7500] = int(n)
             break
-
-classifier = SklearnClassifier(LogisticRegression())
+classifier = LogisticRegression()
 classifier.train(X_train, y_train)
-print ('Accuracy', nltk.classify.accuracy(classifier, X_test, y_test))
+print ('Accuracy', classifier.score(X_test, y_test))
