@@ -13,6 +13,8 @@ while(1):
     .replace("\n", "")
     comment = file.readline()
     blank = file.readline()
+    if data == "":
+        break
     labels.append(label)
 
 file.close()
