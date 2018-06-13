@@ -11,6 +11,8 @@ while(1):
     label = file.readline().replace("(e2,e1)", "") \
     .replace("(e1,e2)", "") \
     .replace("\n", "")
+    comment = file.readline()
+    blank = file.readline()
     labels.append(label)
 
 file.close()
