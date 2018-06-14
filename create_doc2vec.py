@@ -35,7 +35,7 @@ for i in range(8000):
 
 # print(sentences[0])
 
-model = Doc2Vec(min_count=1, window=10, vector_size=400, sample=1e-4, negative=5, workers=8)
+model = Doc2Vec(min_count=1, window=10, vector_size=200, sample=1e-4, negative=5, workers=4)
 
 model.build_vocab(sentences)
 model.train(sentences_perm(sentences), total_examples=model.corpus_count, epochs=1000)

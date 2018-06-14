@@ -26,7 +26,7 @@ model = Doc2Vec.load('./train.d2v')
 wv = model['configuration']
 print(wv)
 
-X_train = np.zeros((7500, 400))
+X_train = np.zeros((7500, 200))
 y_train = np.zeros(7500)
 
 
@@ -38,7 +38,7 @@ for i in range(7500):
             break
         # print("train %i" % i)
 
-X_test = np.zeros((500, 400))
+X_test = np.zeros((500, 200))
 y_test = np.zeros(500)
 
 
