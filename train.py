@@ -33,17 +33,18 @@ filtered_sentence = nltk.FreqDist(labels)
 label_list = list(filtered_sentence.keys())
 model = Doc2Vec.load('./train.d2v')
 # wv = model['configuration']
-# print(wv, len(wv))
+# new_vec = model.infer_vector('configuration')
+# print(new_vec)
 
 X_train = np.zeros((7500, 400))
 y_train = np.zeros(7500)
 
 
 for i in range(7500):
-    a = model[words[i][0]]
-    b = model[words[i][1]]
+    a = model.infer_vector(words[i][0])
+    b = model.infer_vector(words[i][0])
     X_train[i] = np.concatenate([a, b])
-    print('x=%i' % i, X_train[i])
+    # print('x=%i' % i, X_train[i])
     for n, key in enumerate(label_list):
         if labels[i] == key:
             y_train[i] = int(n)
@@ -55,8 +56,8 @@ y_test = np.zeros(500)
 
 
 for i in range(7500, 8000):
-    a = model[words[i][0]]
-    b = model[words[i][1]]
+    a = model.infer_vector(words[i][0])
+    b = model.infer_vector(words[i][0])
     X_test[i-7500] = np.concatenate([a, b])
     for n, key in enumerate(label_list):
         if labels[i] == key:
