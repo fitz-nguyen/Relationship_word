@@ -3,6 +3,7 @@ from gensim.models import Word2Vec
 from nltk.tokenize import word_tokenize
 from gensim.models.doc2vec import TaggedDocument
 import random
+import re
 
 training = []
 words = []
