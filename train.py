@@ -10,47 +10,54 @@ labels = []
 words = []
 while(1):
     data = file.readline()
-    e1 = re.search(r'<e1>(.*)</e1>', data).group(1)
-    e2 = re.search(r'<e2>(.*)</e2>', data).group(1)
-    label = file.readline().replace("\n", "") 
-    e = re.search(r'(.*)(\(.*\))', label).group(2)
-    if e == '(e1,e2)':
-        words.append([e1,e2])
-    else:
-        words.append([e2,e1])
-    comment = file.readline()
-    blank = file.readline()
     if data == "":
         break
-    labels.append(label.replace('(e1, e2)', '').replace('(e2, e1)', ''))
-
+    e1 = re.search(r'<e1>(.*)</e1>', data).group(1)
+    e2 = re.search(r'<e2>(.*)</e2>', data).group(1)
+    label = file.readline().replace("\n", "")
+    try:
+        e = re.search(r'(.*)(\(.*\))', label).groups(2)
+    except AttributeError:
+        e = 0
+    if e == '(e2,e1)':
+        words.append([e2, e1])
+    else:
+        words.append([e1, e2])
+    comment = file.readline()
+    blank = file.readline()
+    labels.append(label.replace('(e1,e2)', '').replace('(e2,e1)', ''))
 file.close()
+
 
 filtered_sentence = nltk.FreqDist(labels)
 label_list = list(filtered_sentence.keys())
-
 model = Doc2Vec.load('./train.d2v')
-wv = model['configuration']
-print(wv)
+# wv = model['configuration']
+# print(wv, len(wv))
 
-X_train = np.zeros((7500, 200))
+X_train = np.zeros((7500, 400))
 y_train = np.zeros(7500)
 
 
 for i in range(7500):
-    X_train[i] = model.docvecs['%s' % i]
+    a = model[words[i][0]]
+    b = model[words[i][1]]
+    X_train[i] = np.concatenate([a, b])
+    print('x=%i' % i, X_train[i])
     for n, key in enumerate(label_list):
         if labels[i] == key:
             y_train[i] = int(n)
             break
         # print("train %i" % i)
-
-X_test = np.zeros((500, 200))
+print('ok')
+X_test = np.zeros((500, 400))
 y_test = np.zeros(500)
 
 
 for i in range(7500, 8000):
-    X_test[i - 7500] = model.docvecs['%s' % i]
+    a = model[words[i][0]]
+    b = model[words[i][1]]
+    X_test[i-7500] = np.concatenate([a, b])
     for n, key in enumerate(label_list):
         if labels[i] == key:
             y_test[i - 7500] = int(n)
