@@ -33,7 +33,7 @@ while(1):
         words.append([e2, e1])
     else:
         words.append([e1, e2])
-    label = file.readline().replace("\n", "")
+    label = file.readline()
     comment = file.readline()
     blank = file.readline()
     split_word = word_tokenize(data.replace("<e1>", "").replace("</e1>", "")\
