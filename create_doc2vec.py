@@ -31,12 +31,12 @@ while(1):
 
 file.close()
 for i in range(8000):
-    sentences.append(TaggedDocument(training[i], ['%s' % i]))
+    sentences.append(training[i])
 
 
 # print(sentences[0])
 
-model = Doc2Vec(min_count=1, window=10, vector_size=200, sample=1e-4, negative=5, workers=4)
+model = Word2Vec(min_count=1, window=10, vector_size=200, sample=1e-4, negative=5, workers=4)
 
 model.build_vocab(sentences)
 model.train(sentences_perm(sentences), total_examples=model.corpus_count, epochs=1000)
