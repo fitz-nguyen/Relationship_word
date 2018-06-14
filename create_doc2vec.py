@@ -19,7 +19,8 @@ def sentences_perm(sentences):
 
 
 while(1):
-    data = file.readline()
+    data = file.readline().replace("<e1>", "").replace("</e1>", "")\
+        .replace("<e2>", "").replace("</e2>", "")
     label = file.readline()
     comment = file.readline()
     blank = file.readline()

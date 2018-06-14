@@ -1,2 +1,3 @@
 train.d2v.wv.vectors.npy
 train.d2v.trainables.syn1neg.npy
+.DS_Store

@@ -4,18 +4,25 @@ import nltk
 from nltk.classify.scikitlearn import SklearnClassifier
 # numpy
 import numpy as np
+import re
 file = open("TRAIN_FILE.TXT", "r")
 labels = []
+words = []
 while(1):
     data = file.readline()
-    label = file.readline().replace("(e2,e1)", "") \
-    .replace("(e1,e2)", "") \
-    .replace("\n", "")
+    e1 = re.search(r'<e1>(.*)</e1>', data).group(1)
+    e2 = re.search(r'<e2>(.*)</e2>', data).group(1)
+    label = file.readline().replace("\n", "") 
+    e = re.search(r'(.*)(\(.*\))', label).group(2)
+    if e == '(e1,e2)':
+        words.append([e1,e2])
+    else:
+        words.append([e2,e1])
     comment = file.readline()
     blank = file.readline()
     if data == "":
         break
-    labels.append(label)
+    labels.append(label.replace('(e1, e2)', '').replace('(e2, e1)', ''))
 
 file.close()
 
