@@ -39,19 +39,19 @@ while(1):
         .replace("<e2>", "").replace("</e2>", ""))
     if len(e1.split()) > 1 and len(e2.split()) == 1:
         split = np.delete(split_word, [split_word.index(e1.split()[0]), split_word.index(e1.split()[1])] )
-        split = np.insert(split, split_word.index(e1.split()[0]))
+        split = np.insert(split, split_word.index(e1.split()[0]), e1)
         training.append(split)
     elif len(e2.split()) > 1 and len(e1.split()) == 1:
         split = np.delete(split_word, [split_word.index(e2.split()[0]), split_word.index(e1.split()[1])] )
-        split = np.insert(split, split_word.index(e2.split()[0]))
+        split = np.insert(split, split_word.index(e2.split()[0]), e2)
         training.append(split)
     elif len(e2.split()) > 1 and len(e1.split()) > 1:
         split = np.delete(split_word, [split_word.index(e2.split()[0]), split_word.index(e1.split()[1])] )
-        split = np.insert(split, split_word.index(e2.split()[0]))
+        split = np.insert(split, split_word.index(e2.split()[0]), e2)
         split = np.delete(split_word, [split_word.index(e1.split()[0]), split_word.index(e1.split()[1])] )
-        split = np.insert(split, split_word.index(e1.split()[0]))
+        split = np.insert(split, split_word.index(e1.split()[0]), e1)
         training.append(split)
-    elif :
+    else :
         training.append(split_word)
 
 
