@@ -23,7 +23,8 @@ filtered_sentence = nltk.FreqDist(labels)
 label_list = list(filtered_sentence.keys())
 
 model = Doc2Vec.load('./train.d2v')
-
+wv = model['configuration']
+print(wv)
 
 X_train = np.zeros((7500, 400))
 y_train = np.zeros(7500)
@@ -35,7 +36,7 @@ for i in range(7500):
         if labels[i] == key:
             y_train[i] = int(n)
             break
-    print("train %i" % i)
+        # print("train %i" % i)
 
 X_test = np.zeros((500, 400))
 y_test = np.zeros(500)
