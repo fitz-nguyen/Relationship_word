@@ -37,7 +37,7 @@ for i in range(8000):
 # print(sentences[0])
 
 
-model = Word2Vec(min_count=1, window=10, vector_size=200, sample=1e-4, negative=5, workers=4)
+model = Word2Vec(min_count=1, window=10, size=200, sample=1e-4, negative=5, workers=4)
 
 
 model.build_vocab(sentences)
