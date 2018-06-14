@@ -1,5 +1,5 @@
 
-from gensim.models import Doc2Vec
+from gensim.models import Word2Vec
 from nltk.tokenize import word_tokenize
 from gensim.models.doc2vec import TaggedDocument
 import random
@@ -36,7 +36,7 @@ for i in range(8000):
 
 # print(sentences[0])
 
-model = Doc2Vec(min_count=1, window=10, vector_size=200, sample=1e-4, negative=5, workers=4)
+model = Word2Vec(min_count=1, window=10, size=200, sample=1e-4, negative=5, workers=4, sg=1)
 
 model.build_vocab(sentences)
 model.train(sentences_perm(sentences), total_examples=model.corpus_count, epochs=1000)
