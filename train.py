@@ -1,7 +1,5 @@
 from gensim.models import Doc2Vec
 from sklearn.linear_model import LogisticRegression
-import nltk
-from nltk.classify.scikitlearn import SklearnClassifier
 # numpy
 import numpy as np
 import re
@@ -58,7 +56,7 @@ y_test = np.zeros(500)
 for i in range(7500, 8000):
     a = model[words[i][0]]
     b = model[words[i][1]]
-    X_test[i-7500] = np.concatenate([a, b])
+    X_test[i - 7500] = np.concatenate([a, b])
     for n, key in enumerate(label_list):
         if labels[i] == key:
             y_test[i - 7500] = int(n)
@@ -70,3 +68,4 @@ print ('Accuracy', classifier.score(X_test, y_test))
 # classifier = SGDClassifier()
 # classifier.fit(X_train, y_train)
 # print ('Accuracy', classifier.score(X_test, y_test))
+
