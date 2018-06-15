@@ -4,6 +4,7 @@ from nltk.tokenize import word_tokenize
 from gensim.models.doc2vec import TaggedDocument
 import random
 import re
+import numpy as np
 
 training = []
 words = []
@@ -21,6 +22,7 @@ def sentences_perm(sentences):
 
 while(1):
     data = file.readline()
+    label = file.readline()
     if data == "":
         break
     e1 = re.search(r'<e1>(.*)</e1>', data).group(1)
@@ -33,29 +35,34 @@ while(1):
         words.append([e2, e1])
     else:
         words.append([e1, e2])
-    label = file.readline()
     comment = file.readline()
     blank = file.readline()
     split_word = word_tokenize(data.replace("<e1>", "").replace("</e1>", "")\
-        .replace("<e2>", "").replace("</e2>", ""))
+        .replace("<e2>", "").replace("</e2>", "").replace("\"", ""))
+    index1 = split_word.index(e1.split()[0])
+    index2 = split_word.index(e2.split()[0])
     if len(e1.split()) > 1 and len(e2.split()) == 1:
-        split = np.delete(split_word, [split_word.index(e1.split()[0]), split_word.index(e1.split()[1])] )
-        split = np.insert(split, split_word.index(e1.split()[0]), e1)
-        training.append(split)
+        split_word.remove(e1.split()[0])
+        split_word.remove(e1.split()[1])
+        split_word.insert(index1, e1)
+        training.append(split_word)
     elif len(e2.split()) > 1 and len(e1.split()) == 1:
-        split = np.delete(split_word, [split_word.index(e2.split()[0]), split_word.index(e1.split()[1])] )
-        split = np.insert(split, split_word.index(e2.split()[0]), e2)
-        training.append(split)
+        split_word.remove(e2.split()[0])
+        split_word.remove(e2.split()[1])
+        split_word.insert(index2, e2)
+        training.append(split_word)
     elif len(e2.split()) > 1 and len(e1.split()) > 1:
-        split = np.delete(split_word, [split_word.index(e2.split()[0]), split_word.index(e1.split()[1])] )
-        split = np.insert(split, split_word.index(e2.split()[0]), e2)
-        split = np.delete(split_word, [split_word.index(e1.split()[0]), split_word.index(e1.split()[1])] )
-        split = np.insert(split, split_word.index(e1.split()[0]), e1)
-        training.append(split)
+        split_word.remove(e2.split()[0])
+        split_word.remove(e2.split()[1])
+        split_word.insert(index2, e2)
+        split_word.remove(e1.split()[0])
+        split_word.remove(e1.split()[1])
+        split_word.insert(index1, e1)
+        training.append(split_word)
     else :
         training.append(split_word)
 
-
+print(len(training))
 
 file.close()
 for i in range(8000):
