@@ -1,4 +1,4 @@
-from gensim.models import Doc2Vec
+from gensim.models import Word2Vec
 from sklearn.linear_model import LogisticRegression, SGDClassifier
 import nltk
 # numpy
@@ -17,48 +17,51 @@ while(1):
     try:
         e = re.search(r'(.*)(\(.*\))', label).groups(2)
     except AttributeError:
-        e = 0
-    if e == '(e2,e1)':
+        e = ['','other']
+    print(e)
+    if e[1] == '(e2,e1)':
+        print("ok")
         words.append([e2, e1])
     else:
+        print("ok2")
         words.append([e1, e2])
     comment = file.readline()
     blank = file.readline()
     labels.append(label.replace('(e1,e2)', '').replace('(e2,e1)', ''))
 file.close()
-
+print(words)
 
 filtered_sentence = nltk.FreqDist(labels)
 label_list = list(filtered_sentence.keys())
-model = Doc2Vec.load('./train.w2v')
+model = Word2Vec.load('./train.w2v')
 # wv = model['configuration']
 # new_vec = model.infer_vector('configuration')
 # print(new_vec)
 
-X_train = np.zeros((7500, 400))
+X_train = np.zeros((7500, 200))
 y_train = np.zeros(7500)
 
 
 for i in range(7500):
+    print(i)
     a = model[words[i][0]]
-    print(a)
     b = model[words[i][1]]
-    X_train[i] = np.concatenate([a, b])
-    # print('x=%i' % i, X_train[i])
+    X_train[i] = a+b    # print('x=%i' % i, X_train[i])
     for n, key in enumerate(label_list):
         if labels[i] == key:
             y_train[i] = int(n)
             break
         # print("train %i" % i)
 print('ok')
-X_test = np.zeros((500, 400))
+X_test = np.zeros((500, 200))
 y_test = np.zeros(500)
 
 
 for i in range(7500, 8000):
+    print(i)
     a = model[words[i][0]]
     b = model[words[i][1]]
-    X_test[i - 7500] = np.concatenate([a, b])
+    X_test[i - 7500] = a+b
     for n, key in enumerate(label_list):
         if labels[i] == key:
             y_test[i - 7500] = int(n)

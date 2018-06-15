@@ -72,11 +72,11 @@ for i in range(8000):
 # print(sentences[0])
 
 
-model = Word2Vec(min_count=1, window=10, size=200, sample=1e-4, negative=5, workers=4)
+model = Word2Vec(min_count=10, window=10, size=200, sample=1e-4, negative=5, workers=4)
 
 
 model.build_vocab(sentences)
-model.train(sentences_perm(sentences), total_examples=model.corpus_count, epochs=1000)
+model.train(sentences_perm(sentences), total_examples=model.corpus_count, epochs=500)
 
 
 model.save('./train.w2v')
