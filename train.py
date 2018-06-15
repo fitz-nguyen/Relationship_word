@@ -41,6 +41,7 @@ y_train = np.zeros(7500)
 
 for i in range(7500):
     a = model[words[i][0]]
+    print(a)
     b = model[words[i][1]]
     X_train[i] = np.concatenate([a, b])
     # print('x=%i' % i, X_train[i])
@@ -66,6 +67,6 @@ classifier = LogisticRegression()
 classifier.fit(X_train, y_train)
 print ('Accuracy', classifier.score(X_test, y_test))
 
-classifier = SGDClassifier()
-classifier.fit(X_train, y_train)
-print ('Accuracy', classifier.score(X_test, y_test))
+classifier1 = SGDClassifier()
+classifier1.fit(X_train, y_train)
+print ('Accuracy', classifier1.score(X_test, y_test))
