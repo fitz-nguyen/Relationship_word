@@ -1,6 +1,6 @@
-from gensim.models import Doc2Vec
+from gensim.models import Word2Vec
 from sklearn.linear_model import LogisticRegression
-# numpy
+import nltk
 import numpy as np
 import re
 file = open("TRAIN_FILE.TXT", "r")
@@ -16,20 +16,21 @@ while(1):
     try:
         e = re.search(r'(.*)(\(.*\))', label).groups(2)
     except AttributeError:
-        e = 0
-    if e == '(e2,e1)':
+        e = ['', 'other']
+    print(e[1])
+    if e[1] == '(e2,e1)':
         words.append([e2, e1])
     else:
         words.append([e1, e2])
     comment = file.readline()
     blank = file.readline()
-    labels.append(label)
+    labels.append(label.replace("(e1,e2)", "").replace("(e2,e1)", ""))
 file.close()
 
 
 filtered_sentence = nltk.FreqDist(labels)
 label_list = list(filtered_sentence.keys())
-model = Doc2Vec.load('./train.w2v')
+model = Word2Vec.load('./train.w2v')
 # wv = model['configuration']
 # new_vec = model.infer_vector('configuration')
 # print(new_vec)
@@ -68,4 +69,3 @@ print ('Accuracy', classifier.score(X_test, y_test))
 # classifier = SGDClassifier()
 # classifier.fit(X_train, y_train)
 # print ('Accuracy', classifier.score(X_test, y_test))
-
