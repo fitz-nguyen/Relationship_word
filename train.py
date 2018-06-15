@@ -21,7 +21,6 @@ while(1):
         e = re.search(r'(.*)(\(.*\))', label).groups(2)
     except AttributeError:
         e = ['', 'other']
-    print(e[1])
     if e[1] == '(e2,e1)':
         words.append([e2, e1])
     else:
@@ -41,11 +40,11 @@ model = Word2Vec.load('./train.w2v')
 # new_vec = model.infer_vector('configuration')
 # print(new_vec)
 
-X_train = np.zeros((7900, 400))
-y_train = np.zeros(7900)
+X_train = np.zeros((8000, 400))
+y_train = np.zeros(8000)
 
 
-for i in range(7900):
+for i in range(8000):
     a = model[words[i][0]]
     b = model[words[i][1]]
     X_train[i] = np.concatenate([a, b])
@@ -56,18 +55,18 @@ for i in range(7900):
             break
         # print("train %i" % i)
 print('ok')
-X_test = np.zeros((100, 400))
-y_test = np.zeros(100)
+# X_test = np.zeros((1000, 400))
+# y_test = np.zeros(1000)
 
 
-for i in range(7900, 8000):
-    a = model[words[i][0]]
-    b = model[words[i][1]]
-    X_test[i - 7900] = np.concatenate([a, b])
-    for n, key in enumerate(label_list):
-        if labels[i] == key:
-            y_test[i - 7900] = int(n)
-            break
+# for i in range(7000, 8000):
+#     a = model[words[i][0]]
+#     b = model[words[i][1]]
+#     X_test[i - 7000] = np.concatenate([a, b])
+#     for n, key in enumerate(label_list):
+#         if labels[i] == key:
+#             y_test[i - 7000] = int(n)
+#             break
 
 # classifier = LogisticRegression()
 # classifier.fit(X_train, y_train)
@@ -83,7 +82,7 @@ for i in range(7900, 8000):
 # print ('Accuracy', classifier.score(X_test, y_test))
 # model = neighbors.KNeighborsClassifier(n_neighbors = 1, p = 2)
 # model = neighbors.KNeighborsClassifier(n_neighbors = 1, p = 2)
-# X_train, X_test, y_train, y_test = train_test_split(X_train, y_train, test_size=100)
+X_train, X_test, y_train, y_test = train_test_split(X_train, y_train, test_size=500)
 
 # def myweight(distances):
 #     sigma2 = .4 # we can change this number
@@ -96,10 +95,10 @@ for i in range(7900, 8000):
 
 
 alpha = 1e-1 # regularization parameter
-clf = MLPClassifier(solver='lbfgs', alpha=alpha, hidden_layer_sizes=(100))
+clf = MLPClassifier(activation='tanh', solver='sgd', alpha=alpha, hidden_layer_sizes=(1000))
 clf.fit(X_train, y_train)
-y_pred = clf.predict(X_train)
-acc = 100*np.mean(y_pred == y_train)
+y_pred = clf.predict(X_test)
+acc = 100*np.mean(y_pred == y_test)
 print('training accuracy: %.2f %%' % acc)
 
 
