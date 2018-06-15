@@ -1,5 +1,5 @@
 from gensim.models import Doc2Vec
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegression, SSGDClassifier
 import nltk
 from nltk.classify.scikitlearn import SklearnClassifier
 # numpy
@@ -64,5 +64,9 @@ for i in range(7500, 8000):
             y_test[i - 7500] = int(n)
             break
 classifier = LogisticRegression()
+classifier.fit(X_train, y_train)
+print ('Accuracy', classifier.score(X_test, y_test))
+
+classifier = SGDClassifier()
 classifier.fit(X_train, y_train)
 print ('Accuracy', classifier.score(X_test, y_test))
