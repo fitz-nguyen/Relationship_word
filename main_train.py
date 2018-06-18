@@ -10,11 +10,14 @@ import re
 
 
 file = open("TRAIN_FILE.TXT", "r")
+file_test = open("TEST_FILE.txt", "r")
 labels = []
 words = []
-print("loading data ...")
+words_test = []
+testing_set = []
 
 
+print("loading training data in TRAIN_FILE.TXT ...")
 while(1):
     data = file.readline()
     if data == "":
@@ -22,45 +25,54 @@ while(1):
     e1 = re.search(r'<e1>(.*)</e1>', data).group(1)
     e2 = re.search(r'<e2>(.*)</e2>', data).group(1)
     label = file.readline().replace("\n", "")
-    # try:
-    #     e = re.search(r'(.*)(\(.*\))', label).groups(2)
-    # except AttributeError:
-    #     e = ['', 'other']
-    # if e[1] == '(e2,e1)':
-    #     words.append([e2, e1])
-    # else:
-    #     words.append([e1, e2])
     words.append([e1,e2])
     comment = file.readline()
     blank = file.readline()
     # labels.append(label)
     labels.append(label)
 file.close()
-print("loaded data ... ")
+print("finished training data ...")
 
 
+print("loading features for training_set ...")
 filtered_sentence = nltk.FreqDist(labels)
 label_list = list(filtered_sentence.keys())
 model = Word2Vec.load('./train2.w2v')
-
-X_train = np.zeros((8000, 2400))
+X_train = np.zeros((8000, 400))
 y_train = np.zeros(8000)
 for i in range(8000):
-    similar = np.concatenate([model.wv.most_similar(words[i][0], topn = 5), model.wv.most_similar(words[i][1], topn = 5)])
     a = model[words[i][0]]
     b = model[words[i][1]]
-
-    features = np.concatenate([a, b])
-    for j in range(10):
-        features = np.concatenate([features, model[similar[j][0]]])
-    # print('x=%i' % i, X_train[i])
-    X_train[i] = features
+    X_train[i] = np.concatenate([a, b])
     for n, key in enumerate(label_list):
         if labels[i] == key:
             y_train[i] = int(n)
             break
-        # print("train %i" % i)
-print("loaded data ... ")
+print("finished ...")
+
+
+print("loading testing data in TEST_FILE.txt ...")
+while(1):
+    data = file_test.readline()
+    if data == "":
+        break
+    e1 = re.search(r'<e1>(.*)</e1>', data).group(1)
+    e2 = re.search(r'<e2>(.*)</e2>', data).group(1)
+    words_test.append([e1, e2])
+file_test.close()
+print("finished testing data ... ")
+
+
+model_test = Word2Vec.load('./test.w2v')
+print("loading features for testing_set ...")
+X_testing = np.zeros((2717, 400))
+for i in range(2717):
+    a = model_test[words_test[i][0]]
+    b = model_test[words_test[i][1]]
+    X_testing[i] = np.concatenate([a, b])
+print("finished ...")
+
+
 X_train, X_test, y_train, y_test = train_test_split(X_train, y_train, test_size=500)
 print('training...')
 alpha = 1e-1 # regularization parameter
@@ -69,3 +81,35 @@ clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test)
 acc = 100*np.mean(y_pred == y_test)
 print('training accuracy: %.2f %%' % acc)
+
+
+print("Save the results ... ")
+results = clf.predict(X_testing)
+file_results = open("results.txt", "w")
+for i in range(8001, 10717):
+    for n, key in enumerate(label_list):
+        if results[i-8001] == n:
+            file_results.write(str(i) + " " + key + "\n")
+            break
+print("finished.")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
