@@ -53,7 +53,7 @@ while(1):
     else :
         training.append(split_word)
     i+=1
-
+print(training[1])
 # model = Word2Vec(min_count=1, window=10, size=200, sample=1e-4, negative=5, workers=4)
 # print("ok...")
 
