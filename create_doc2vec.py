@@ -63,7 +63,7 @@ while(1):
         training.append(split_word)
     i+=1
 
-print(len(training))
+print(training[1])
 
 file.close()
 for i in range(8000):
@@ -80,5 +80,5 @@ model.build_vocab(sentences)
 model.train(sentences_perm(sentences), total_examples=model.corpus_count, epochs=1000)
 
 
-model.save('./train.w2v')
+model.save('./train2.w2v')
 

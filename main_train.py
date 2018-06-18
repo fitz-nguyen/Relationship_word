@@ -41,9 +41,9 @@ print("loaded data ... ")
 
 filtered_sentence = nltk.FreqDist(labels)
 label_list = list(filtered_sentence.keys())
-model = Word2Vec.load('./train.w2v')
+model = Word2Vec.load('./train2.w2v')
 
-print(model.wv.most_similar("child", topn = 5))
+print(model.wv.most_similar("child"))
 # X_train = np.zeros((8000, 200))
 # y_train = np.zeros(8000)
 # for i in range(8000):

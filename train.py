@@ -44,7 +44,7 @@ label_list = list(filtered_sentence.keys())
 model = Word2Vec.load('./train.w2v')
 
 
-X_train = np.zeros((8000, 200))
+X_train = np.zeros((8000, 400))
 y_train = np.zeros(8000)
 for i in range(8000):
     a = model[words[i][0]]
