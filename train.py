@@ -95,7 +95,7 @@ X_train, X_test, y_train, y_test = train_test_split(X_train, y_train, test_size=
 
 
 alpha = 1e-1 # regularization parameter
-clf = MLPClassifier(activation='tanh', solver='sgd', alpha=alpha, hidden_layer_sizes=(1000))
+clf = MLPClassifier(solver='sgd', alpha=alpha, hidden_layer_sizes=(1000))
 clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test)
 acc = 100*np.mean(y_pred == y_test)
