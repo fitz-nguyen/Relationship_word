@@ -7,9 +7,14 @@ from sklearn import neighbors
 import nltk
 import numpy as np
 import re
+
+
 file = open("TRAIN_FILE.TXT", "r")
 labels = []
 words = []
+print("loading data ...")
+
+
 while(1):
     data = file.readline()
     if data == "":
@@ -31,19 +36,16 @@ while(1):
     # labels.append(label)
     labels.append(label.replace("(e1,e2)", "").replace("(e2,e1)", ""))
 file.close()
+print("loaded data ... ")
 
 
 filtered_sentence = nltk.FreqDist(labels)
 label_list = list(filtered_sentence.keys())
 model = Word2Vec.load('./train.w2v')
-# wv = model['configuration']
-# new_vec = model.infer_vector('configuration')
-# print(new_vec)
+
 
 X_train = np.zeros((8000, 400))
 y_train = np.zeros(8000)
-
-
 for i in range(8000):
     a = model[words[i][0]]
     b = model[words[i][1]]
@@ -54,46 +56,10 @@ for i in range(8000):
             y_train[i] = int(n)
             break
         # print("train %i" % i)
-print('ok')
-# X_test = np.zeros((1000, 400))
-# y_test = np.zeros(1000)
 
 
-# for i in range(7000, 8000):
-#     a = model[words[i][0]]
-#     b = model[words[i][1]]
-#     X_test[i - 7000] = np.concatenate([a, b])
-#     for n, key in enumerate(label_list):
-#         if labels[i] == key:
-#             y_test[i - 7000] = int(n)
-#             break
-
-# classifier = LogisticRegression()
-# classifier.fit(X_train, y_train)
-# print ('Accuracy', classifier.score(X_test, y_test))
-
-# model = LogisticRegression(C = 1e5,
-#         solver = "lbfgs", multi_class = "multinomial") # C is inverse of lam
-# model.fit(X_train, y_train)
-# y_pred = model.predict(X_test)
-# print("Accuracy %.2f %%" % (100*accuracy_score(y_test, y_pred.tolist())))
-# classifier = SGDClassifier()
-# classifier.fit(X_train, y_train)
-# print ('Accuracy', classifier.score(X_test, y_test))
-# model = neighbors.KNeighborsClassifier(n_neighbors = 1, p = 2)
-# model = neighbors.KNeighborsClassifier(n_neighbors = 1, p = 2)
 X_train, X_test, y_train, y_test = train_test_split(X_train, y_train, test_size=500)
-
-# def myweight(distances):
-#     sigma2 = .4 # we can change this number
-#     return np.exp(-distances**2/sigma2)
-
-# model = neighbors.KNeighborsClassifier(n_neighbors = 7, p = 2, weights = myweight)
-# model.fit(X_train, y_train)
-# y_pred = model.predict(X_test)
-# print("Accuracy of 7NN: %.2f %%" %(100*accuracy_score(y_test, y_pred)))
-
-
+print('training...')
 alpha = 1e-1 # regularization parameter
 clf = MLPClassifier(activation='tanh', solver='sgd', alpha=alpha, hidden_layer_sizes=(1000))
 clf.fit(X_train, y_train)
