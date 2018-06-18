@@ -19,7 +19,7 @@ def sentences_perm(sentences):
     random.shuffle(shuffled)
     return shuffled
 
-
+i = 1
 while(1):
     data = file.readline()
     label = file.readline()
@@ -38,7 +38,7 @@ while(1):
     comment = file.readline()
     blank = file.readline()
     split_word = word_tokenize(data.replace("<e1>", "").replace("</e1>", "")\
-        .replace("<e2>", "").replace("</e2>", "").replace("\"", ""))
+        .replace("<e2>", "").replace("</e2>", "").replace("\"", "").replace(str(i), ""))
     index1 = split_word.index(e1.split()[0])
     index2 = split_word.index(e2.split()[0])
     if len(e1.split()) > 1 and len(e2.split()) == 1:
@@ -61,8 +61,9 @@ while(1):
         training.append(split_word)
     else :
         training.append(split_word)
+    i+=1
 
-print(len(training))
+print(training[1])
 
 file.close()
 for i in range(8000):
@@ -79,5 +80,5 @@ model.build_vocab(sentences)
 model.train(sentences_perm(sentences), total_examples=model.corpus_count, epochs=1000)
 
 
-model.save('./train.w2v')
+model.save('./train2.w2v')
 
