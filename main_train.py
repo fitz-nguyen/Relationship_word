@@ -43,26 +43,29 @@ filtered_sentence = nltk.FreqDist(labels)
 label_list = list(filtered_sentence.keys())
 model = Word2Vec.load('./train2.w2v')
 
-print(model.wv.most_similar("child"))
-# X_train = np.zeros((8000, 200))
-# y_train = np.zeros(8000)
-# for i in range(8000):
-#     a = model[words[i][0]]
-#     b = model[words[i][1]]
-#     X_train[i] = np.concatenate([a, b])
-#     # print('x=%i' % i, X_train[i])
-#     for n, key in enumerate(label_list):
-#         if labels[i] == key:
-#             y_train[i] = int(n)
-#             break
-#         # print("train %i" % i)
+X_train = np.zeros((8000, 2400))
+y_train = np.zeros(8000)
+for i in range(8000):
+    similar = np.concatenate([model.wv.most_similar(words[i][0], topn = 5), model.wv.most_similar(words[i][1], topn = 5)])
+    a = model[words[i][0]]
+    b = model[words[i][1]]
 
-
-# X_train, X_test, y_train, y_test = train_test_split(X_train, y_train, test_size=500)
-# print('training...')
-# alpha = 1e-1 # regularization parameter
-# clf = MLPClassifier(activation='tanh', solver='sgd', alpha=alpha, hidden_layer_sizes=(200))
-# clf.fit(X_train, y_train)
-# y_pred = clf.predict(X_test)
-# acc = 100*np.mean(y_pred == y_test)
-# print('training accuracy: %.2f %%' % acc)
+    features = np.concatenate([a, b])
+    for j in range(10):
+        features = np.concatenate([features, model[similar[j][0]]])
+    # print('x=%i' % i, X_train[i])
+    X_train[i] = features
+    for n, key in enumerate(label_list):
+        if labels[i] == key:
+            y_train[i] = int(n)
+            break
+        # print("train %i" % i)
+print("loaded data ... ")
+X_train, X_test, y_train, y_test = train_test_split(X_train, y_train, test_size=500)
+print('training...')
+alpha = 1e-1 # regularization parameter
+clf = MLPClassifier(activation='tanh', solver='sgd', alpha=alpha, hidden_layer_sizes=(200))
+clf.fit(X_train, y_train)
+y_pred = clf.predict(X_test)
+acc = 100*np.mean(y_pred == y_test)
+print('training accuracy: %.2f %%' % acc)

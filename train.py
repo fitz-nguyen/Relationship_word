@@ -61,7 +61,7 @@ for i in range(8000):
 X_train, X_test, y_train, y_test = train_test_split(X_train, y_train, test_size=500)
 print('training...')
 alpha = 1e-1 # regularization parameter
-clf = MLPClassifier(activation='tanh', solver='sgd', alpha=alpha, hidden_layer_sizes=(200))
+clf = MLPClassifier(activation='relu', solver='sgd', alpha=alpha, hidden_layer_sizes=(200))
 clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test)
 acc = 100*np.mean(y_pred == y_test)
