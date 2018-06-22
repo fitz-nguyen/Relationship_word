@@ -1,9 +1,9 @@
 from gensim.models import Word2Vec
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
+# from sklearn.linear_model import LogisticRegression
+# from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
-from sklearn import neighbors
+# from sklearn import neighbors
 import nltk
 import numpy as np
 import re
@@ -25,7 +25,7 @@ while(1):
     e1 = re.search(r'<e1>(.*)</e1>', data).group(1)
     e2 = re.search(r'<e2>(.*)</e2>', data).group(1)
     label = file.readline().replace("\n", "")
-    words.append([e1,e2])
+    words.append([e1, e2])
     comment = file.readline()
     blank = file.readline()
     # labels.append(label)
@@ -75,11 +75,12 @@ print("finished ...")
 
 X_train, X_test, y_train, y_test = train_test_split(X_train, y_train, test_size=500)
 print('training...')
-alpha = 1e-1 # regularization parameter
-clf = MLPClassifier(activation='tanh', solver='sgd', alpha=alpha, hidden_layer_sizes=(200))
+alpha = 1e-1 
+# regularization parameter
+clf = MLPClassifier(activation='tanh', solver='sgd', alpha=alpha, hidden_layer_sizes=(1000))
 clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test)
-acc = 100*np.mean(y_pred == y_test)
+acc = 100 * np.mean(y_pred == y_test)
 print('training accuracy: %.2f %%' % acc)
 
 
@@ -88,7 +89,7 @@ results = clf.predict(X_testing)
 file_results = open("results.txt", "w")
 for i in range(8001, 10717):
     for n, key in enumerate(label_list):
-        if results[i-8001] == n:
+        if results[i - 8001] == n:
             file_results.write(str(i) + " " + key + "\n")
             break
 print("finished.")
